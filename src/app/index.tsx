@@ -7,6 +7,17 @@ import sm from '@assets/images/pfbg_768.jpg';
 import sm2x from '@assets/images/pfbg_768@2x.jpg';
 import lg from '@assets/images/pfbg_1200.jpg';
 import filter from '@assets/images/background-filter.svg';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  sortable,
+  SortByDirection,
+  headerCol,
+  TableVariant,
+  expandable,
+  cellWidth
+} from '@patternfly/react-table';
 
 const images = {
   [BackgroundImageSrc.xs]: xs,
@@ -18,31 +29,56 @@ const images = {
 };
 
 export default class App extends Component {
-  public state = {
-    isShowing: true
+  state = {
+    columns: [
+      { title: 'Repositories' },
+      'Branches',
+      { title: 'Pull requests' },
+      'Workspaces',
+      {
+        title: 'Last Commit'
+      }
+    ],
+    rows: [
+      ['one', 'two', 'three', 'four', 'five'],
+      [
+        {
+          title: <div>one - 2</div>,
+          props: { title: 'hover title', colSpan: 3 }
+        },
+        'four - 2',
+        'five - 2'
+      ],
+      [
+        'one - 3',
+        'two - 3',
+        'three - 3',
+        'four - 3',
+        {
+          title: 'five - 3 (not centered)',
+          props: { textCenter: false }
+        }
+      ]
+    ]
   };
+
   public render() {
-    const { isShowing } = this.state;
     return (
       <React.Fragment>
         <BackgroundImage src={images} />
         <div className="app-container">
-          {isShowing && (
-            <div className="notification-container">
-              <Alert
-                variant="success"
-                title="Setup Complete"
-                action={<AlertActionCloseButton onClose={this.dismissNotification} />}
-              >
-                You have successfully launched your patternfly starter project.
-              </Alert>
-            </div>
-          )}
+          <Table
+            caption="Simple Table"
+            //@ts-ignore
+            cells={this.state.columns}
+            //@ts-ignore
+            rows={this.state.rows}
+          >
+            <TableHeader />
+            <TableBody />
+          </Table>
         </div>
       </React.Fragment>
     );
   }
-  private dismissNotification = () => {
-    this.setState({ isShowing: false });
-  };
 }
